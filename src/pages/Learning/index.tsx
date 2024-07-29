@@ -7,10 +7,15 @@ import { Sheet, SheetContent, SheetDescription,SheetHeader,SheetTitle,SheetTrigg
 import CreateCourseForm from './CreateCourseForm';
 import AuthService from '@/services/Auth';
 import { useMutation } from '@tanstack/react-query';
+import InfoCourse from './InfoCourse';
 
 
 function Learning() {
     const [open, setLOpen] = useState(false);
+    const [openDataCourse, setOpenDataCourse] = useState({
+        open: false,
+        data: null
+    });
     let setup = useMutation({
         mutationFn: LearnigService.getAll,
         onSuccess: async (data) => {
@@ -30,6 +35,25 @@ function Learning() {
         }
     });
 
+
+    const deleteCoussr = useMutation({
+        mutationFn: LearnigService.deleteCourse,
+        onSuccess: async (data) => {
+            setup.mutate();
+        },
+        onError: (error) => {
+            alert("")
+        }
+    });
+
+    const getTask = async (id:string) => {
+        await AuthService.refreshAccessToken();
+        const res = await LearnigService.getCourse(id);
+        setOpenDataCourse({
+            open: true,
+            data: res
+        })
+    }
     useEffect( () => {
        setup.mutate();
     }, [] );
@@ -59,7 +83,6 @@ function Learning() {
                 </TableHeader>
                 <TableBody>
                     { setup.data &&
-                    
                     setup.data?.map( (i:any) => {
                         return <TableRow>
                                 <TableCell>{i.title}</TableCell>
@@ -67,15 +90,17 @@ function Learning() {
                                 <TableCell>{i.lenguages ? i.lenguages : ""}</TableCell> 
                                 <TableCell>{i.status === true ? 'Activo': 'Inactivo' }</TableCell>
                                 <TableCell>
-                                    <Button variant="ghost" className=' p-1 mx-1 w-7'><Eye /> </Button>
-                                    <Button variant="ghost" className=' p-1 mx-1 w-7'><Settings /></Button>
-                                    <Button variant="ghost" className=' p-1 mx-1 text-red-600 w-7'><Trash2 /> </Button>
+                                    <Button variant="ghost" className=' p-1 mx-1 w-7'
+                                    onClick={() => getTask(i._id)}
+                                    ><Eye /> </Button>
+                                    
+                                    <Button variant="ghost" className=' p-1 mx-1 text-red-600 w-7'
+                                    onClick={() => deleteCoussr.mutate(i._id)}
+                                    ><Trash2 /> </Button>
                                 </TableCell>
                             </TableRow>
                     } ) 
-                    
                     }
-                    
                 </TableBody>
             </Table>
             </div>
@@ -88,6 +113,11 @@ function Learning() {
                    <CreateCourseForm 
                    onAction={setLOpen}
                    />
+               </SheetContent>
+           </Sheet>
+           <Sheet open={openDataCourse.open} onOpenChange={() => setOpenDataCourse({ open: false, data: null }) }>
+               <SheetContent className='min-w-[60%]'>
+                   <InfoCourse data={openDataCourse.data}/>
                </SheetContent>
            </Sheet>
         </div>
