@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem,  SelectTrigger, SelectValue } from "
 import { Switch } from "@/components/ui/switch"
 import AuthService from '@/services/Auth'
 import { Textarea } from "@/components/ui/textarea"
+import { MoveRight , Trash2} from 'lucide-react';
 const formSchema = z.object({
     name: z.string().min(2, {
       message: "name must be at least 2 characters.",
@@ -35,6 +36,11 @@ const formSchema = z.object({
 function CreateUserForm({onOpne, setupdateView}:any) {
 
     const [loading, setLoading] = React.useState(false)
+    const [option, setOption]: any[] = React.useState([]);
+    const [opcionEscribe, setopcionEscribe] = React.useState("");
+
+    const [optionSpecialities, setSpecialities]: any[] = React.useState([]);
+    const [opcionSpecialitiesEscribe, setSpecialitiesopcionEscribe] = React.useState("");
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -47,7 +53,12 @@ function CreateUserForm({onOpne, setupdateView}:any) {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setLoading(true)
-            const rest = await AuthService.signup(values);
+            let obj = {
+                ...values,
+                certifications: option,
+                specialities: optionSpecialities
+            }
+            const rest = await AuthService.signup(obj);
             setLoading(true)
             onOpne(false)
             setupdateView(true)
@@ -56,19 +67,33 @@ function CreateUserForm({onOpne, setupdateView}:any) {
         }
         
     }
+    const addOption = () => {
+        setOption([
+            ...option,
+            opcionEscribe
+        ])
+        setopcionEscribe("")
+    }
+
+    const addOptionSpecialities = () => {
+        setSpecialities([
+            ...optionSpecialities,
+            opcionSpecialitiesEscribe
+        ])
+        setSpecialitiesopcionEscribe("")
+    }
 
     return (
-        <div className='w-full'>
+        <div className='w-full h-full overflow-y-auto'>
             <h3 className='text-[20px] font-semibold mb-4'>Create new User</h3>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 w-full">
-                    <div className='flex gap-3'>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+                    <div className='flex gap-3 mb-4'>
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
                                 <FormItem className='w-full'>
-                                    <FormLabel>name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="name" {...field} />
                                     </FormControl>
@@ -80,7 +105,6 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                             name="username"
                             render={({ field }) => (
                                 <FormItem className='w-full'>
-                                    <FormLabel>User name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="user name" {...field} />
                                     </FormControl>
@@ -88,17 +112,48 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                             )}
                         />
                     </div>
-                    <div className='flex gap-3'>
+                    <FormField
+                        control={form.control}
+                        name="about"
+                        render={({ field }) => (
+                            <FormItem className='mb-4'>
+                                <FormControl>
+                                    <Textarea  placeholder="about" {...field}  />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <div className='flex flex-col gap-3 mb-6 border-b-[3px] pb-4'>
+                    <b>Certifications</b>
+                     { option.map((i:any) =>  <div className='flex items-center'>
+                                <Input type="Text" value={i} 
+                                className='bg-[#EAF3DE]'
+                            /> 
+
+                            <Trash2  className='ml-3' onClick={() => {
+                                let filterIten = option.filter( (e:string) => e != i)
+                                setOption(filterIten);
+                            }}/>
+                        </div>
+                        ) }
+                         <Input type="Text" placeholder="Write an option" 
+                            value={opcionEscribe}
+                            onChange={(e:any) => setopcionEscribe(e.target.value) }
+                        />
+                        <Button type="button" onClick={addOption} disabled={opcionEscribe.length >= 1 ? false : true}>Add option</Button>
+                    </div>
+
+                    
+                    <div className='flex gap-3 mt-4'>
 
                         <FormField
                             control={form.control}
                             name="email"
                             render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="email" {...field} type="email" />
-                                </FormControl>
+                                <FormItem className='w-full'>
+                                    <FormControl>
+                                        <Input placeholder="email" {...field} type="email" />
+                                    </FormControl>
                                 </FormItem>
                             )}
                         />
@@ -106,11 +161,10 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                             control={form.control}
                             name="phone"
                             render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>phone</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="phone" {...field} />
-                                </FormControl>
+                                <FormItem className='w-full'>
+                                    <FormControl>
+                                        <Input placeholder="phone" {...field} />
+                                    </FormControl>
                                 </FormItem>
                             )}
                         />
@@ -120,22 +174,9 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                         control={form.control}
                         name="password"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>password</FormLabel>
+                            <FormItem className='my-4'>
                                 <FormControl>
                                     <Input placeholder="password" {...field}  />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="about"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>about</FormLabel>
-                                <FormControl>
-                                    <Textarea  placeholder="about" {...field}  />
                                 </FormControl>
                             </FormItem>
                         )}
@@ -146,13 +187,10 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                         name="role"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>User Permissions*</FormLabel>
                                 <FormControl>
-                              
-
                                     <Select {...field} value={field.value} onValueChange={(e) => field.onChange(e)}>
                                         <SelectTrigger id="framework">
-                                            <SelectValue placeholder="Select" />
+                                            <SelectValue placeholder="User Permissions*" />
                                         </SelectTrigger>
                                         <SelectContent position="popper">
                                             <SelectItem value="admin">Admin</SelectItem>
@@ -164,12 +202,31 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                             </FormItem>
                         )}
                     />
+                    <div className='flex flex-col gap-3 mb-6 border-b-[3px] py-4'>
+                        <b>Specialities</b>
+                        { optionSpecialities.map((i:any) =>  <div className='flex items-center'>
+                                <Input type="Text" value={i} 
+                                className='bg-[#EAF3DE]'
+                            /> 
+
+                            <Trash2  className='ml-3' onClick={() => {
+                                let filterIten = optionSpecialities.filter( (e:string) => e != i)
+                                setSpecialities(filterIten);
+                            }}/>
+                        </div>
+                        )}
+                        <Input type="Text" placeholder="Write an option" 
+                            value={opcionSpecialitiesEscribe}
+                            onChange={(e:any) => setSpecialitiesopcionEscribe(e.target.value) }
+                        />
+                        <Button type="button" onClick={addOptionSpecialities} disabled={opcionSpecialitiesEscribe.length >= 1 ? false : true}>Add option</Button>
+                    </div>
 
                     <FormField
                         control={form.control}
                         name="status"
                         render={({ field }) => (
-                            <FormItem className='flex-col'>
+                            <FormItem className='flex-col mt-4'>
                                 <FormLabel className='w-full'>status*</FormLabel>
                                 <FormControl>
                                     <div className='w-full flex gap-3'>
@@ -181,6 +238,7 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                             </FormItem>
                         )}
                     />
+                    
                     <div className='flex justify-end gap-4 border-t-2 pt-4 mt-6'>
                         <Button type="button" variant="outline" onClick={() => onOpne(false)}>Cancel</Button>
                         <Button type="submit" disabled={loading}> { loading === true ? "Saving..." : "Save" }  </Button>
