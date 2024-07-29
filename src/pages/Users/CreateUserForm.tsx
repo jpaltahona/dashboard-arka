@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem,  SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import AuthService from '@/services/Auth'
-
+import { Textarea } from "@/components/ui/textarea"
 const formSchema = z.object({
     name: z.string().min(2, {
       message: "name must be at least 2 characters.",
@@ -22,6 +22,7 @@ const formSchema = z.object({
     password: z.string().min(5, {
         message: "password must be at least 6 characters.",
     }),
+    about: z.string().optional(),
     phone: z.string().optional(),
     role: z.string().min(2, {
         message: "Rol is required",
@@ -60,13 +61,13 @@ function CreateUserForm({onOpne, setupdateView}:any) {
         <div className='w-full'>
             <h3 className='text-[20px] font-semibold mb-4'>Create new User</h3>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 w-full">
                     <div className='flex gap-3'>
                         <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className='w-full'>
                                     <FormLabel>name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="name" {...field} />
@@ -78,7 +79,7 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                             control={form.control}
                             name="username"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className='w-full'>
                                     <FormLabel>User name</FormLabel>
                                     <FormControl>
                                         <Input placeholder="user name" {...field} />
@@ -123,6 +124,18 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                                 <FormLabel>password</FormLabel>
                                 <FormControl>
                                     <Input placeholder="password" {...field}  />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="about"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>about</FormLabel>
+                                <FormControl>
+                                    <Textarea  placeholder="about" {...field}  />
                                 </FormControl>
                             </FormItem>
                         )}

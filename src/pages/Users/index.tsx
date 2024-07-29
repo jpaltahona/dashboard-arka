@@ -8,6 +8,7 @@ import AuthService from '@/services/Auth'
 import { Input } from '@/components/ui/input'
 import CreateUserForm from './CreateUserForm'
 import { useMutation } from '@tanstack/react-query'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet"
 
 function Users() {
 
@@ -48,15 +49,9 @@ function Users() {
                 <div className='mb-5'>
                     <h2 className='text-[24px] font-semibold'>User's List</h2>
                 </div>
-                
-                <Popover open={visible}>
-                    <PopoverTrigger>
-                        <Button onClick={() => setVisible(true)}><Plus /> Add New User </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-[500px]  shadow-2xl p-6 !right-[-40px]'>
-                        <CreateUserForm onOpne={setVisible} setupdateView={setupdateView} />
-                    </PopoverContent>
-                </Popover>
+                <Button onClick={() => setVisible(true)}>
+                    <Plus /> Add New User
+                </Button>
 
             </div>
 
@@ -91,13 +86,14 @@ function Users() {
                     </TableRow>
                     ))}
                 </TableBody>
-                <TableFooter>
-                    <TableRow>
-                    <TableCell colSpan={3}>Total</TableCell>
-                    <TableCell className="text-right">$2,500.00</TableCell>
-                    </TableRow>
-                </TableFooter>
-                </Table>
+            </Table>
+
+            <Sheet open={visible} onOpenChange={() => setVisible(false)}>
+                <SheetContent className='!min-w-[600px]'>
+                    <CreateUserForm onOpne={setVisible} setupdateView={setupdateView} />
+                </SheetContent>
+            </Sheet>
+
         </div>
     )
 }
