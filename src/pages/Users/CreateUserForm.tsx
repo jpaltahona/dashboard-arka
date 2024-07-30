@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch"
 import AuthService from '@/services/Auth'
 import { Textarea } from "@/components/ui/textarea"
 import { MoveRight , Trash2} from 'lucide-react';
+
 const formSchema = z.object({
     name: z.string().min(2, {
       message: "name must be at least 2 characters.",

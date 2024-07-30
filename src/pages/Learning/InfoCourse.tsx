@@ -1,4 +1,5 @@
 function InfoCourse({data}:any) {
+    console.log("curso -> ", data)
     return (
         <div className='mt-8'>
             { data && <>
@@ -18,6 +19,10 @@ function InfoCourse({data}:any) {
                     </div>
                     <h2 className='text-[20px] font-bold mb-3'> {data.title}</h2>
                     <p className='text-[16px] font-medium mb-3'>{data.description}</p>
+
+                    <div>
+                       <h3>Teacher: <b>{data.teachers.name}</b> </h3>
+                    </div>
                 </div>
             </>  }
         </div>
