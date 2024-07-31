@@ -65,7 +65,7 @@ function CreateUserForm({onOpne, setupdateView}:any) {
             await AuthService.refreshAccessToken();
             const rest = await AuthService.create(obj);
             setLoading(false)
-             onOpne(false)
+            onOpne(false)
             setupdateView(true)
         } catch (error) {
             alert("error al crar usuario")
