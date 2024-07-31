@@ -12,6 +12,7 @@ import Learning from './pages/Learning/index.tsx';
 import Supports from './pages/Supports/index.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './context/auth-content.tsx';
+import Prices from './pages/Prices/index.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,7 +46,12 @@ const router = createBrowserRouter([
       {
         path: "Supports",
         element: <Supports />
-      }, 
+      },
+      {
+        path: "Prices",
+        element: <Prices />
+      },
+      
   ]
   },
  

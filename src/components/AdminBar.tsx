@@ -1,10 +1,9 @@
 
-import { UsersRound, FolderSync, BrainCog, Cable, ClipboardCheck } from "lucide-react"
+import { UsersRound, FolderSync, BrainCog, Cable, ClipboardCheck, HandCoins } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import logo from '../assets/images/arkaLogo.png'
-import { Avatar, AvatarFallback, AvatarImage, } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage,  } from "@/components/ui/avatar"
 import { useNavigate } from "react-router-dom"
-import { jwtDecode } from "jwt-decode"
 import { useAuth } from "@/context/auth-content"
 
 
@@ -12,32 +11,30 @@ function AdminBar() {
     const {user} = useAuth();
     let navigate = useNavigate()
 
-    console.log(user)
-
     return (
         <div className='w-full flex flex-col justify-between h-full p-4'>
         
             <ul  className='w-full flex-1 text-center'>
                 <img src={logo} className='mb-6 h-[30px]'/>
 
-                <li className='mb-3'>
-                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost' onClick={ ()=> navigate('Users')}>
+                <li className='mb-3' onClick={ ()=> navigate('Users')}>
+                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost' >
                         <UsersRound className="mr-2 h-4 w-4" /> Users
                     </Button>
                 </li>
-                <li className='mb-3'>
-                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost' onClick={ ()=> navigate('Journey')}>
+                <li className='mb-3' onClick={ ()=> navigate('Journey')}>
+                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost' >
                         <FolderSync className="mr-2 h-4 w-4" /> Journey
                     </Button>
                 </li>
-                <li className='mb-3'>
-                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost' onClick={ ()=> navigate('Learning')}>
+                <li className='mb-3' onClick={ ()=> navigate('Learning')}>
+                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost' >
                         <BrainCog  className="mr-2 h-4 w-4" /> Learning Center
                     </Button>
                 </li>
                 
-                <li className='mb-3'>
-                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost' onClick={ ()=> navigate('Supports')}>
+                <li className='mb-3' onClick={ ()=> navigate('Supports')}>
+                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost' >
                         <Cable className="mr-2 h-4 w-4" /> Supports 
                     </Button>
                 </li>
@@ -46,6 +43,14 @@ function AdminBar() {
                         <ClipboardCheck  className="mr-2 h-4 w-4" /> Tasks 
                     </Button>
                 </li>
+                <li className='mb-3' onClick={ ()=> navigate('Prices')}>
+                    <Button  className='w-full text-[#111827] justify-start text-[15px] font-semibold' variant='ghost'
+                    
+                    >
+                        <HandCoins   className="mr-2 h-4 w-4" /> Prices 
+                    </Button>
+                </li>
+                
             </ul>
             <div className='w-full bg-[#0c1a10] flex p-3 rounded-lg'>
                 <Avatar>

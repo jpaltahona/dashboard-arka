@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Table,TableBody,TableCell,TableFooter,TableHead,TableHeader,TableRow} from "@/components/ui/table"
-import {  Popover, PopoverContent,PopoverTrigger, } from "@/components/ui/popover"
 import { Button } from '@/components/ui/button'
 import { ArrowDownUp, Plus } from 'lucide-react'
 import UsersService from '@/services/users'
