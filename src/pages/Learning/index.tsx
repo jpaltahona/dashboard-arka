@@ -61,6 +61,7 @@ function Learning() {
     if(setup.isError) return <div>Error</div>
     if(setup.isPending) return <div className='flex h-[350px] w-full justify-center items-center'>Cargado...</div>
 
+    console.log(setup.data)
     return (
         <div className='bg-[#fff] p-5 rounded-lg h-full overflow-auto'>
             <div className='flex justify-between items-center'>  
@@ -77,6 +78,7 @@ function Learning() {
                         <TableHead>title</TableHead>
                         <TableHead>type</TableHead>
                         <TableHead>lenguages</TableHead>
+                        <TableHead>Teacher</TableHead>
                         <TableHead>status</TableHead>
                         <TableHead>Actions</TableHead>
                     </TableRow>
@@ -88,6 +90,7 @@ function Learning() {
                                 <TableCell>{i.title}</TableCell>
                                 <TableCell>{i.type}</TableCell>
                                 <TableCell>{i.lenguages ? i.lenguages : ""}</TableCell> 
+                                <TableHead>{i.teachers.name}</TableHead>
                                 <TableCell>{i.status === true ? 'Activo': 'Inactivo' }</TableCell>
                                 <TableCell>
                                     <Button variant="ghost" className=' p-1 mx-1 w-7'
