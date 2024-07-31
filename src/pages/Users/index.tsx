@@ -54,10 +54,13 @@ function Users() {
                 </Button>
 
             </div>
-
-            <div className='my-3'>
-                <Input placeholder='Search user ...' />
-            </div>
+            {
+                /*    
+                <div className='my-3'>
+                    <Input placeholder='Search user ...' />
+                </div>
+                */
+            }
 
             <Table>
                 <TableHeader className='bg-[#eeeeee] p-0'>
@@ -89,7 +92,7 @@ function Users() {
             </Table>
 
             <Sheet open={visible} onOpenChange={() => setVisible(false)}>
-                <SheetContent className='!min-w-[600px]'>
+                <SheetContent className='!min-w-[600px] p-0'>
                     <CreateUserForm onOpne={setVisible} setupdateView={setupdateView} />
                 </SheetContent>
             </Sheet>

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import 'filepond/dist/filepond.min.css';
 import './index.css'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProtectedRoute from './ProtectedRoute.tsx';

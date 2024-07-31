@@ -58,7 +58,10 @@ const AuthService = {
     }
     return data
   },
-  
+  async create(payload:any){
+    const response = await axios.post(`${settings.url}/user/create`,payload);
+    return response.data
+  },
   removeAuthToken(){
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

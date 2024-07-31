@@ -10,6 +10,8 @@ import { Switch } from "@/components/ui/switch"
 import AuthService from '@/services/Auth'
 import { Textarea } from "@/components/ui/textarea"
 import { MoveRight , Trash2} from 'lucide-react';
+import { FilePond, registerPlugin } from 'react-filepond';
+import { convertirImagenABase64 } from '@/lib/utils';
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -21,6 +23,7 @@ const formSchema = z.object({
     email: z.string().email({
         message: 'Email is required'
     }),
+    image: z.string().optional(),
     password: z.string().min(5, {
         message: "password must be at least 6 characters.",
     }),
@@ -59,9 +62,10 @@ function CreateUserForm({onOpne, setupdateView}:any) {
                 certifications: option,
                 specialities: optionSpecialities
             }
-            const rest = await AuthService.signup(obj);
-            setLoading(true)
-            onOpne(false)
+            await AuthService.refreshAccessToken();
+            const rest = await AuthService.create(obj);
+            setLoading(false)
+             onOpne(false)
             setupdateView(true)
         } catch (error) {
             alert("error al crar usuario")
@@ -85,10 +89,36 @@ function CreateUserForm({onOpne, setupdateView}:any) {
     }
 
     return (
-        <div className='w-full h-full overflow-y-auto'>
+        <div className='w-full h-full overflow-y-auto p-[26px]'>
             <h3 className='text-[20px] font-semibold mb-4'>Create new User</h3>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+                    <FormField
+                            control={form.control}
+                            name="image"
+                            render={({ field }) => (
+                                <FormItem className='mb-4  h-[80px]'>
+                                    <FormControl>
+                                        <FilePond
+                                            acceptedFileTypes={['image/png', 'image/jpeg']}
+                                        
+                                            onupdatefiles={ async (e:any) => {
+                                                const base64String = await convertirImagenABase64(e[0].file);
+                                                field.onChange(base64String)
+                                            }}
+                                            allowMultiple={false}
+                                            name="files"
+                                            className="inputs"
+                                            labelIdle={`<div class="h-full flex flex-col justify-center items-center ">
+                                           
+                                            <span class="filepond--label-action font-bold">Profile image <span class="text-[#5080EF]">click aquí</span> </span>
+                                            </div>`}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     <div className='flex gap-3 mb-4'>
                         <FormField
                             control={form.control}
