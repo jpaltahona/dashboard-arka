@@ -111,9 +111,9 @@ function Prices() {
        
         <div className='grid grid-cols-2 gap-4 h-[400px] w-[60%] overflow-y-auto mr-6'>
             { setup.data?.map((i:any) => {
-                return <div className='w-[280px] h-[150px] shadow-md rounded-[20px] p-[16px] bg-[#EAF3DE]'>
+                return <div className='w-[280px] shadow-md rounded-[20px] px-[18px] py-3 bg-[#EAF3DE]'>
                     <div className='flex justify-between items-center'>
-                        <div className='w-[100px] h-[30px] flex justify-center items-center text-[#19402E] bg-[#CBDEAE] rounded-lg font-bold text-[10px]'>
+                        <div className='px-2 py-2  flex justify-center items-center text-[#19402E] bg-[#CBDEAE] rounded-lg font-bold text-[10px]'>
                             {i.title}
                         </div>
                         <Button className='' variant="ghost" onClick={() => deletePrice.mutate(i._id)}>
@@ -122,16 +122,17 @@ function Prices() {
                     </div>
                     <div className='mt-3'>
                         <h3 className='text-[#19402E] text-[15px] font-bold'>${i.price}/Month</h3>
-                        <p className='text-[#19402E] text-[12px] font-medium'>
+                        <p className='text-[#19402E] mt-2 text-[12px] font-medium'>
                             {i.desciption}
                         </p>
                     </div>
                 </div>
             }) }
         </div>
-        <div className='w-[40%]'>
+        <div className='w-[40%] rounded-lg bg-[#f3f3f3]  p-6'>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit((value) => cratePrice.mutate(value))} className="space-y-2 w-[350px]">
+                <h3 className=' font-semibold mb-3 text-[20px]'>Create New prices</h3>
+                <form onSubmit={form.handleSubmit((value) => cratePrice.mutate(value))} className="w-full">
                     <FormField
                         control={form.control}
                         name="title"
