@@ -20,6 +20,25 @@ const UsersService = {
             return error
         }
     },
+    async findByid(id:string){
+        try {
+            const response = await axios(`${settings.url}/user/${id}`, {
+                method: 'GET',
+            });
+            return response.data;
+        } catch (error) {
+            return error
+        }
+    },
+    async deleteUserByid(id:string){
+        try {
+            const response = await axios.delete(`${settings.url}/user/${id}`);
+            return response.data;
+        } catch (error) {
+            return error
+        }
+    },
+    
 }
 
 export default UsersService;

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Table,TableBody,TableCell,TableFooter,TableHead,TableHeader,TableRow} from "@/components/ui/table"
 import { Button } from '@/components/ui/button'
-import { ArrowDownUp, Plus } from 'lucide-react'
+import { ArrowDownUp, Plus, Eye, Trash2  } from 'lucide-react'
 import UsersService from '@/services/users'
 import AuthService from '@/services/Auth'
-import { Input } from '@/components/ui/input'
 import CreateUserForm from './CreateUserForm'
 import { useMutation } from '@tanstack/react-query'
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger,} from "@/components/ui/sheet"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
 
 function Users() {
 
@@ -33,6 +32,15 @@ function Users() {
     });
 
    
+    const getOneUser = async (id:string) => {
+        const user = await UsersService.findByid(id);
+        console.log(id, user)
+    }
+    const deleteUser = async (id:string) => {
+        const user = await UsersService.deleteUserByid(id);
+        console.log(id, user)
+        setup.mutate();
+    }
 
 
     useEffect( () => {
@@ -76,6 +84,9 @@ function Users() {
                         <TableHead className='text-[#111827] text-[15px] p-0 h-auto'>
                             <Button className='font-bold w-full  items-center justify-between p-2' variant="ghost">Role <ArrowDownUp className='w-[16px]' /></Button>
                         </TableHead>
+                        <TableHead className='text-[#111827] text-[15px] p-0 h-auto'>
+                            Actions
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -85,6 +96,10 @@ function Users() {
                         <TableCell className='font-medium text-[#555555] text-[14px] p-3'>{invoice.email}</TableCell>
                         <TableCell className='font-medium text-[#555555] text-[14px] p-3'>{invoice.username}</TableCell>
                         <TableCell className='font-medium text-[#555555] text-[14px] p-3'>{invoice.role}</TableCell>
+                        <TableCell className='font-medium text-[#555555] text-[14px] p-3 flex gap-3'>
+                            <Button variant="ghost" className='p-0' onClick={() => getOneUser(invoice._id)}> <Eye /> </Button>
+                            <Button variant="ghost" className='p-0' onClick={() => deleteUser(invoice._id)}> <Trash2 className='text-[#ff2b2b]' /> </Button>
+                        </TableCell>
                     </TableRow>
                     ))}
                 </TableBody>

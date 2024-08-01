@@ -108,7 +108,6 @@ function Prices() {
           
     </div>
     <div className='bg-[#fff] p-5 rounded-lgoverflow-auto flex h-fit '>
-       
         <div className='grid grid-cols-2 gap-4 h-[400px] w-[60%] overflow-y-auto mr-6'>
             { setup.data?.map((i:any) => {
                 return <div className='w-[280px] shadow-md rounded-[20px] px-[18px] py-3 bg-[#EAF3DE]'>
