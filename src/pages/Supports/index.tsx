@@ -10,8 +10,6 @@ import { Button } from '@/components/ui/button'
 import { useMutation } from '@tanstack/react-query'
 
 function Supports() {
-    const [loading, setLoading] = useState(true);
-
     let setup = useMutation({
         mutationFn: SupportsService.getAll,
         onSuccess: async (data) => {
