@@ -100,14 +100,14 @@ function Prices() {
 
   return (
     <>
-     <div className='flex justify-between items-center'>  
+    <div className='flex justify-between items-center'>  
             <div className='mb-5'>
                 <h2 className='text-[26px] font-semibold'>List Prices</h2>
                 <p className='text-[16px] text-[#424242]'>Create prices for services Supports</p>
             </div>
           
-        </div>
-        <div className='bg-[#fff] p-5 rounded-lgoverflow-auto flex h-fit '>
+    </div>
+    <div className='bg-[#fff] p-5 rounded-lgoverflow-auto flex h-fit '>
        
         <div className='grid grid-cols-2 gap-4 h-[400px] w-[60%] overflow-y-auto mr-6'>
             { setup.data?.map((i:any) => {
