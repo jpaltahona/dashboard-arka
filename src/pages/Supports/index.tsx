@@ -1,15 +1,39 @@
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import React, { useEffect, useState } from 'react'
 import SupportsService from '@/services/Supports'
-import { format } from 'date-fns';
-import Cookies from 'universal-cookie';
 import AuthService from '@/services/Auth';
-const cookies = new Cookies();
-import { Eye, Trash2, Settings, Check } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from '@/components/ui/button'
+
 import { useMutation } from '@tanstack/react-query'
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import { format, parse, startOfWeek, getDay, Locale } from 'date-fns';
+import enUS from 'date-fns/locale/en-US';
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+  } from "@/components/ui/sheet"
+
+  const locales = {
+    'en-US': enUS,
+  };
+  const localizer = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek: () => startOfWeek(new Date(), { weekStartsOn: 0 }),
+    getDay,
+    locales
+  });
 
 function Supports() {
+    const [currentEvents, setCurrentEvents]:any = useState([]);
+    const [openItem, setOpenItem]:any = useState({
+        open: false,
+        data: null
+    });
     let setup = useMutation({
         mutationFn: SupportsService.getAll,
         onSuccess: async (data) => {
@@ -21,16 +45,23 @@ function Supports() {
                 AuthService.removeAuthToken();
                }
             }
+            let newArra = data?.map((i:any) => {
+             return {
+                ...i,
+                title: i.note,
+                start: new Date(i.date),
+                end: new Date(i.date),
+              }   
+            });
+            setCurrentEvents(newArra);
            return data
         },
         onError: (error) => {
             console.log("error ", error)
         }
-    });
+    }); 
 
-    const upDateItem =(type:string, data:any) => {
-
-    }
+  
     useEffect( () => {
         setup.mutate();
     }, [] )
@@ -38,46 +69,55 @@ function Supports() {
     if(setup.isError) return <div>Error</div>
     if(setup.isPending) return <div className='flex h-[350px] w-full justify-center items-center'>Loading...</div>
 
+    console.log(openItem)
     return (
         <div className='bg-[#fff] p-5 rounded-lg h-full overflow-auto'>
-        <div className='flex justify-between items-center'>  
-            <div className='mb-5'>
-                <h2 className='text-[26px] font-semibold'>You Meetings</h2>
-                <p className='text-[16px] text-[#424242]'>Adminstra tus Encuestas</p>
+            <div>
+                <div style={{ height: 500 }}>
+                    <Calendar
+                        localizer={localizer}
+                        events={currentEvents}
+                        startAccessor="start"
+                        endAccessor="end"
+                        style={{ height: 500 }}
+                        defaultView="month"
+                        selectable
+                        views={['month']}    
+                        onSelectSlot={(slotInfo:any) => {
+                        const title = window.prompt('New Event name');
+                        if (title) {
+                            setCurrentEvents([
+                            ...currentEvents,
+                            {
+                                start: slotInfo.start,
+                                end: slotInfo.end,
+                                title,
+                            },
+                            ]);
+                        }
+                        }}
+                        eventPropGetter={(event:any) => ({
+                        style: {
+                            backgroundColor: event.title === 'Meeting' ? 'lightblue' : 'lightgreen',
+                        },
+                        })}
+                        onSelectEvent={(event) => setOpenItem({ open: true, data: event })}
+                    />
+                </div>
             </div>
-          
+            <Sheet open={openItem.open} onOpenChange={() => setOpenItem({ open: false, data: null }) }>
+                
+                <SheetContent>
+                    <SheetHeader>
+                    <SheetTitle> {openItem.data?.title} </SheetTitle>
+                    <SheetDescription>
+                           usuario: {openItem.data?.user?.name}
+                    </SheetDescription>
+                    </SheetHeader>
+                </SheetContent>
+                </Sheet>
+
         </div>
-        <div>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>user</TableHead>
-                        <TableHead>date</TableHead>
-                        <TableHead>note</TableHead>
-                        <TableHead>status</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    { setup.data && setup.data.map( (i:any) => {
-                        return <TableRow>
-                                <TableCell>{i.user.name}</TableCell>
-                                <TableCell>{format(i.date, "MM/dd/yyyy")}</TableCell>
-                                <TableCell>{i.note}</TableCell>
-                                <TableCell>{i.status === 1 ? 'Activo': 'Inactivo' }</TableCell>
-                                <TableCell>
-                                    <Button variant="ghost" className=' p-1 mx-1 w-7' onClick={() => upDateItem("check", i)}><Check /></Button>
-                                    <Button variant="ghost" className=' p-1 mx-1 text-red-600 w-7'
-                                    onClick={() => upDateItem("delete", i)}
-                                    ><Trash2 /> </Button>
-                                </TableCell>
-                            </TableRow>
-                    } ) }
-                    
-                </TableBody>
-            </Table>
-        </div>
-    </div>
     )
 }
 

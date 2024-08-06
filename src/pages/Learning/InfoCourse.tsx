@@ -21,7 +21,7 @@ function InfoCourse({data}:any) {
                     <p className='text-[16px] font-medium mb-3'>{data.description}</p>
 
                     <div>
-                       <h3>Teacher: <b>{data.teachers.name}</b> </h3>
+                       <h3>Teacher: <b>{data.teachers?.name}</b> </h3>
                     </div>
                 </div>
             </>  }

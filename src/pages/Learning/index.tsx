@@ -90,7 +90,7 @@ function Learning() {
                                 <TableCell>{i.title}</TableCell>
                                 <TableCell>{i.type}</TableCell>
                                 <TableCell>{i.lenguages ? i.lenguages : ""}</TableCell> 
-                                <TableHead>{i.teachers.name}</TableHead>
+                                <TableHead>{i.teachers?.name}</TableHead>
                                 <TableCell>{i.status === true ? 'Activo': 'Inactivo' }</TableCell>
                                 <TableCell>
                                     <Button variant="ghost" className=' p-1 mx-1 w-7'
